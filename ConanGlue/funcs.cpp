@@ -10,6 +10,7 @@ void AddLog(CEdit*log,CString z)
   logstr.Append(z);
   logstr.Append(_T("\r\n"));
   log->SetWindowText(logstr);
+  log->LineScroll(log->GetLineCount());
 }
 
 

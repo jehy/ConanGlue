@@ -214,6 +214,7 @@ void CConanGlueDlg::OnBnClickedButton3()
 
 void CConanGlueDlg::OnBnClickedButton4()
 {
+	ProgressBar.ShowWindow(SW_SHOW);
 	ProgressBar.SetPos(0);
 	ProgressBar.SetStep(1);
 
@@ -374,6 +375,7 @@ void CConanGlueDlg::OnBnClickedButton4()
 	delete(Conan);
 	ProgressBar.StepIt();
 	AddLog(&Log, _T("запись окончена"));
+	ProgressBar.ShowWindow(SW_HIDE);
 }
 
 
