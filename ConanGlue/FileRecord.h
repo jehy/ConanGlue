@@ -2,8 +2,8 @@
 class FileRecord
 {
 public:
-	FileRecord(char* line);
+	FileRecord(TCHAR* line);
 	~FileRecord(void);
-	char* Fname;
+	TCHAR* Fname;
 	int RecNum;
 };

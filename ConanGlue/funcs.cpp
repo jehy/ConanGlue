@@ -6,20 +6,20 @@ using namespace std;
 void AddLog(CEdit*log,CString z)
 {
   CString logstr;
-  log->GetWindowTextA(logstr);
+  log->GetWindowText(logstr);
   logstr.Append(z);
-  logstr.Append("\r\n");
-  log->SetWindowTextA(logstr);
+  logstr.Append(_T("\r\n"));
+  log->SetWindowText(logstr);
 }
 
 
-BOOL WriteConanFile(char*fname, ConanData* Conan,CEdit* log)
+BOOL WriteConanFile(TCHAR* fname, ConanData* Conan,CEdit* log)
 {
   FILE * pFile;
-  fopen_s(&pFile, fname, "w+b");
+  _wfopen_s(&pFile, fname, _T("w+b"));
   if (pFile==NULL)
   {
-	  MessageBox(NULL,"Не могу открыть файл на запись!","Ошибка",MB_OK);
+	  MessageBox(NULL,_T("Не могу открыть файл на запись!"),_T("Ошибка"),MB_OK);
 	  return 0;
   }
   int pos=0;
@@ -97,7 +97,7 @@ BOOL WriteConanFile(char*fname, ConanData* Conan,CEdit* log)
   return 1;
 }
 
-ConanData* ReadConanFile(char* fname,CEdit* log)
+ConanData* ReadConanFile(TCHAR* fname,CEdit* log)
 {
  
   //CString z,logstr;
@@ -106,10 +106,10 @@ ConanData* ReadConanFile(char* fname,CEdit* log)
   long lSize;
   byte * buffer;
   size_t result;
-  fopen_s(&pFile, fname, "r+b");
+  _wfopen_s(&pFile, fname, _T("r+b"));
   if (pFile==NULL)
   {
-	  MessageBox(NULL,"Не могу прочитать файл!","Ошибка",MB_OK);
+	  MessageBox(NULL,_T("Не могу прочитать файл!"),_T("Ошибка"),MB_OK);
 	  return NULL;
   }
   //copy file to buffer for quicker operations
@@ -286,12 +286,12 @@ ConanData* ReadConanFile(char* fname,CEdit* log)
 
 
 bool FileExists(CString strFilename) {
-  struct stat stFileInfo;
+  struct _stat stFileInfo;
   bool blnReturn;
   int intStat;
 
   // Attempt to get the file attributes
-  intStat = stat(strFilename,&stFileInfo);
+  intStat = _wstat(strFilename,&stFileInfo);
   if(intStat == 0) {
     // We were able to get the file attributes
     // so the file obviously exists.

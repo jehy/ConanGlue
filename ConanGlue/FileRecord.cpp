@@ -2,13 +2,13 @@
 #include "FileRecord.h"
 
 
-FileRecord::FileRecord(char* line)
+FileRecord::FileRecord(TCHAR* line)
 {
 	CString l;
   CString f;
 	l=line;
 	int s=l.Find('\t');
-  if(l.Find("File_Name")!=-1)//found header
+  if(l.Find(_T("File_Name"))!=-1)//found header
   {
     this->Fname=NULL;
     return;
@@ -23,13 +23,13 @@ FileRecord::FileRecord(char* line)
       this->Fname=NULL;
       return;
     }
-    MessageBox(NULL,"—имвол табул€ции не найден в строке файла склейки!","‘атальна€ ошибка",MB_OK);
+    MessageBox(NULL,_T("—имвол табул€ции не найден в строке файла склейки!"),_T("‘атальна€ ошибка"),MB_OK);
     exit(0);
   }
-	this->Fname=new char[s+1];
+	this->Fname=new TCHAR[s+1];
 	f=l.Left(s);
-	strcpy_s(this->Fname,s+1,f.GetBuffer());
-	this->RecNum=atoi(l.Mid(s+1));
+	wcscpy_s(this->Fname, s + 1, f.GetBuffer());
+	this->RecNum=_wtoi(l.Mid(s+1));
 }
 
 
