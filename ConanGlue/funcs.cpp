@@ -28,8 +28,8 @@ BOOL WriteConanFile(TCHAR* fname, ConanData* Conan, CEdit* log)
 	pos += sizeof(Conan->Header->cona);
 	fwrite(Conan->Header->head, sizeof(Conan->Header->head), 1, pFile);
 	pos += sizeof(Conan->Header->head);
-	fwrite(Conan->Header->chNames, sizeof(Conan->Header->chNames), 1, pFile);
-	pos += sizeof(Conan->Header->chNames);
+	fwrite(Conan->Header->chNames->get(), Conan->Header->chNames->getlength(), 1, pFile);
+	pos += Conan->Header->chNames->getlength();
 	fwrite(&Conan->Header->TimeData, sizeof(Conan->Header->TimeData), 1, pFile);
 	pos += sizeof(Conan->Header->TimeData);
 	fwrite(&Conan->Header->Arec, sizeof(Conan->Header->Arec), 1, pFile);
@@ -44,18 +44,18 @@ BOOL WriteConanFile(TCHAR* fname, ConanData* Conan, CEdit* log)
 	pos += sizeof(Conan->Header->discrExist);
 	fwrite(&Conan->Header->nRec, sizeof(Conan->Header->nRec), 1, pFile);
 	pos += sizeof(Conan->Header->nRec);
-	fwrite(Conan->Header->nilCalibr, sizeof(Conan->Header->nilCalibr), 1, pFile);
-	pos += sizeof(Conan->Header->nilCalibr);
-	fwrite(Conan->Header->maxCalibr, sizeof(Conan->Header->maxCalibr), 1, pFile);
-	pos += sizeof(Conan->Header->maxCalibr);
-	fwrite(Conan->Header->coord, sizeof(Conan->Header->coord), 1, pFile);
-	pos += sizeof(Conan->Header->coord);
+	fwrite(Conan->Header->nilCalibr->get(), Conan->Header->nilCalibr->getlength(), 1, pFile);
+	pos += Conan->Header->nilCalibr->getlength();
+	fwrite(Conan->Header->maxCalibr->get(), Conan->Header->maxCalibr->getlength(), 1, pFile);
+	pos += Conan->Header->maxCalibr->getlength();
+	fwrite(Conan->Header->coord->get(), Conan->Header->coord->getlength(), 1, pFile);
+	pos += Conan->Header->coord->getlength();
 	////??? 11 or 10 bytes? reserve
 	fwrite(" ", sizeof(__int8), 11, pFile);
 	pos += sizeof(__int8) * 11;
 
-	fwrite(Conan->Header->sens, sizeof(Conan->Header->sens), 1, pFile);
-	pos += sizeof(Conan->Header->sens);
+	fwrite(Conan->Header->sens->get(), Conan->Header->sens->getlength(), 1, pFile);
+	pos += Conan->Header->sens->getlength();
 
 	////records begin from Arec
 	//fwrite(" ",sizeof(__int8),Conan->Header->Arec-pos,pFile);
