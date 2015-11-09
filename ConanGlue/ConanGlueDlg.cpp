@@ -222,7 +222,6 @@ void CConanGlueDlg::OnBnClickedButton4()
 	SettingsFile.GetWindowText(path);
 	FILE *stream;
 	TCHAR line[500];
-
 	if (_wfopen_s(&stream, path, _T("r")) == 0)
 	{
 		while (fgetws(line, 500, stream))
@@ -290,22 +289,44 @@ void CConanGlueDlg::OnBnClickedButton4()
 	Conan->Discr = new StimulSignal*[nRec];
 	//now - fill records!
 	ProgressBar.StepIt();
-
+	CString fnameNew;
 	for (int CurrentRecNum = 0; CurrentRecNum < nRec; CurrentRecNum++)
 	{
-		filedir.GetWindowText(fname);
-		fname.Append(_T("\\"));
-		fname.Append(FileRecords.at(CurrentRecNum)->Fname);
-		info = _T("Переписываем файл ") + fname;
+		filedir.GetWindowText(fnameNew);
+		fnameNew.Append(_T("\\"));
+		fnameNew.Append(FileRecords.at(CurrentRecNum)->Fname);
+		info = _T("Переписываем файл ") + fnameNew;
 		AddLog(&Log, info);
-		ConanData* NewConan = ReadConanFile(fname.GetBuffer(), &Log);
+		ConanData* NewConan = ReadConanFile(fnameNew.GetBuffer(), &Log);
 		if (NewConan == NULL)
 		{
-			info = _T("Не удалось прочитать файл ") + fname;
+			info = _T("Не удалось прочитать файл ") + fnameNew;
 			info.Append(_T(" Склейка не может быть завершена"));
 			MessageBox(info);
+			ProgressBar.ShowWindow(SW_HIDE);
 			return;
 		}
+
+		if (NewConan->Header->isNewVersion() && !Conan->Header->isNewVersion())
+		{
+			info = _T("Версия файла ") + fnameNew + _T(" новее, чем файла ") + fname;
+			info.Append(_T(" Склейка не может быть завершена"));
+			MessageBox(info);
+			delete(NewConan);
+			ProgressBar.ShowWindow(SW_HIDE);
+			return;
+		}
+
+		if (!NewConan->Header->isNewVersion() && Conan->Header->isNewVersion())
+		{
+			info = _T("Версия файла ") + fnameNew + _T(" старее, чем файла ") + fname;
+			info.Append(_T(" Склейка не может быть завершена"));
+			MessageBox(info);
+			delete(NewConan);
+			ProgressBar.ShowWindow(SW_HIDE);
+			return;
+		}
+
 		int CurrentCopyingRecord = FileRecords.at(CurrentRecNum)->RecNum - 1;//not 1 but 0-based index
 		memcpy_s(&Conan->NDataRaw[CurrentRecNum], sizeof(__int16), &NewConan->NDataRaw[CurrentCopyingRecord], sizeof(__int16));
 		memcpy_s(&Conan->NDataReal[CurrentRecNum], sizeof(__int16), &NewConan->NDataReal[CurrentCopyingRecord], sizeof(__int16));
